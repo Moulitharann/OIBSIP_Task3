@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+public class ATMSystem {
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/atm_system";
+    private static final String USER = "root";
+    private static final String PASSWORD = "password";
+
+    public static void main(String[] args) throws IOException, SQLException {
+        Scanner scanner = new Scanner(System.in);
+
+        // Prompt the user to enter their user ID and PIN
+        System.out.println("Enter your user ID: ");
+        String userID = scanner.nextLine();
+        System.out.println("Enter your PIN: ");
+        String PIN = scanner.nextLine();
+
+        // Check if the user ID and PIN are valid
+        Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE user_id = ? AND pin = ?");
+        statement.setString(1, userID);
+        statement.setString(2, PIN);
+
+        ResultSet resultSet = statement.executeQuery();
+        if (!resultSet.next()) {
+            // The user ID and PIN are not valid, so display an error message
+            System.out.println("Invalid user ID or PIN.");
+            return;
+        }
+
+        // The user is logged in, so display the ATM menu
+        displayATMMenu(connection, userID);
+    }
+
+    private static void displayATMMenu(Connection connection, String userID) throws SQLException {
+        System.out.println("Welcome to the ATM system.");
+        System.out.println("Please select an option:");
+        System.out.println("1. View transactions history");
+        System.out.println("2. Withdraw money");
+        System.out.println("3. Deposit money");
+        System.out.println("4. Transfer money");
+        System.out.println("5. Quit");
+
+        // Get the user's selection
+        Scanner scanner = new Scanner(System.in);
+        int selection = scanner.nextInt();
+
+        // Perform the selected operation
+        switch (selection) {
+            case 1:
+                viewTransactionsHistory(connection, userID);
+                break;
+            case 2:
+                withdrawMoney(connection, userID);
+                break;
+            case 3:
+                depositMoney(connection, userID);
+                break;
+            case 4:
+                transferMoney(connection, userID);
+                break;
+            case 5:
+                System.out.println("Thank you for using the ATM system.");
+                System.exit(0);
+        }
+    }
+
+    private static void viewTransactionsHistory(Connection connection, String userID) throws SQLException {
+        // TODO: Implement this method to view the user's transaction history.
+    }
+
+    private static void withdrawMoney(Connection connection, String userID) throws SQLException {
+        // TODO: Implement this method to withdraw money from the user's account.
+    }
+
+    private static void depositMoney(Connection connection, String userID) throws SQLException {
+        // TODO: Implement this method to deposit money into the user's account.
+    }
+
+    private static void transferMoney(Connection connection, String userID) throws SQLException {
+        // TODO: Implement this method to transfer money from one account to another.
+    }
+}
